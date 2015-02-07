@@ -7,11 +7,12 @@ UI.registerHelper 'admin_collections', ->
 	collections = {}
 	if typeof AdminConfig != 'undefined'  and typeof AdminConfig.collections == 'object'
 		collections = AdminConfig.collections
-	collections.Users =
+	collections.AdminUsers =
 		collectionObject: Meteor.users
 		icon: 'user'
 
 	_.map collections, (obj, key) ->
+# 		obj = _.extend obj, {name:key, routeName: adminCollectionRoute(key)}
 		obj = _.extend obj, {name:key}
 		obj = _.defaults obj, {label: key,icon:'plus',color:'blue'}
 
@@ -25,7 +26,7 @@ UI.registerHelper 'admin_current_doc', ->
 	Session.get 'admin_doc'
 
 UI.registerHelper 'admin_is_users_collection', ->
-	Session.get('admin_collection_name') == 'Users'
+	Session.get('admin_collection_name') == 'AdminUsers'
 
 UI.registerHelper 'admin_sidebar_items', ->
 	AdminDashboard.sidebarItems
@@ -41,7 +42,7 @@ UI.registerHelper 'admin_collection_items', ->
 UI.registerHelper 'admin_omit_fields', ->
 	if typeof AdminConfig.autoForm != 'undefined' and typeof AdminConfig.autoForm.omitFields == 'object'
 		global = AdminConfig.autoForm.omitFields
-	if not Session.equals('admin_collection_name','Users') and typeof AdminConfig != 'undefined' and typeof AdminConfig.collections[Session.get 'admin_collection_name'].omitFields == 'object'
+	if not Session.equals('admin_collection_name','AdminUsers') and typeof AdminConfig != 'undefined' and typeof AdminConfig.collections[Session.get 'admin_collection_name'].omitFields == 'object'
 		collection = AdminConfig.collections[Session.get 'admin_collection_name'].omitFields
 	if typeof global == 'object' and typeof collection == 'object'
 		_.union global, collection
@@ -72,13 +73,13 @@ UI.registerHelper 'adminCollectionLabel', (collection)->
 	AdminDashboard.collectionLabel(collection) if collection?
 
 UI.registerHelper 'adminCollectionCount', (collection)->
-	if collection == 'Users'
+	if collection == 'AdminUsers'
 		Meteor.users.find().fetch().length
 	else
 		AdminCollectionsCount.findOne({collection: collection})?.count
 
 UI.registerHelper 'adminTemplate', (collection,mode)->
-	if collection.toLowerCase() != 'users' && typeof AdminConfig.collections[collection].templates != 'undefined'
+	if collection.toLowerCase() != 'adminusers' && typeof AdminConfig.collections[collection].templates != 'undefined'
 		AdminConfig.collections[collection].templates[mode]
 
 UI.registerHelper 'adminGetCollection', (collection)->

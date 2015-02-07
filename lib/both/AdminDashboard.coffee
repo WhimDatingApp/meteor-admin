@@ -16,8 +16,8 @@ AdminDashboard =
 			@next()
 	adminRoutes: ['adminDashboard','adminDashboardUsersNew','adminDashboardUsersView','adminDashboardUsersEdit','adminDashboardView','adminDashboardNew','adminDashboardEdit','adminDashboardDetail']
 	collectionLabel: (collection)->
-		if collection == 'Users'
-			'Users'
+		if collection == 'AdminUsers'
+			'Admin Users'
 		else if collection? and typeof AdminConfig.collections[collection].label == 'string'
 			AdminConfig.collections[collection].label
 		else Session.get 'admin_collection_name'

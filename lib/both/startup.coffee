@@ -20,8 +20,8 @@ adminEditDelButtons = [
 	}
 ]
 
-AdminTables.Users = new Tabular.Table
-	name: 'Users'
+AdminTables.AdminUsers = new Tabular.Table
+	name: 'AdminUsers'
 	collection: Meteor.users
 	columns: _.union [
 		{

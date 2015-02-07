@@ -37,19 +37,19 @@ Router.route "adminDashboard",
 		Session.set 'admin_collection_page', ''
 
 Router.route "adminDashboardUsersNew",
-	path: "/admin/Users/new"
+	path: "/admin/AdminUsers/new"
 	template: "AdminDashboardUsersNew"
 	controller: 'AdminController'
 	action: ->
 		@render()
 	onAfterAction: ->
-		Session.set 'admin_title', 'Users'
-		Session.set 'admin_subtitle', 'Create new user'
+		Session.set 'admin_title', 'Admin Users'
+		Session.set 'admin_subtitle', 'Create new admin user'
 		Session.set 'admin_collection_page', 'New'
-		Session.set 'admin_collection_name', 'Users'
+		Session.set 'admin_collection_name', 'AdminUsers'
 
 Router.route "adminDashboardUsersEdit",
-	path: "/admin/Users/:_id/edit"
+	path: "/admin/AdminUsers/:_id/edit"
 	template: "AdminDashboardUsersEdit"
 	controller: "AdminController"
 	data: ->
@@ -59,10 +59,10 @@ Router.route "adminDashboardUsersEdit",
 	action: ->
 		@render()
 	onAfterAction: ->
-		Session.set 'admin_title', 'Users'
+		Session.set 'admin_title', 'Admin Users'
 		Session.set 'admin_subtitle', 'Edit user ' + @params._id
 		Session.set 'admin_collection_page', 'edit'
-		Session.set 'admin_collection_name', 'Users'
+		Session.set 'admin_collection_name', 'AdminUsers'
 		Session.set 'admin_id', @params._id
 		Session.set 'admin_doc', Meteor.users.findOne({_id:@params._id})
 
