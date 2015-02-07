@@ -1,7 +1,7 @@
 Template.AdminLayout.events
 	'click .btn-delete': (e,t) ->
 		_id = $(e.target).attr('doc')
-		if Session.equals 'admin_collection_name', 'Users' 
+		if Session.equals 'admin_collection_name', 'AdminUsers' 
 			Session.set 'admin_id', _id
 			Session.set 'admin_doc', Meteor.users.findOne(_id)
 		else
