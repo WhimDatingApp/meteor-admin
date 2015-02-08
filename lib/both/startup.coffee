@@ -58,14 +58,39 @@ adminCreateTables = (collections) ->
 		columns = _.map collection.tableColumns, (column) ->
 			if column.template
 				createdCell = (node, cellData, rowData) ->
-					$(node).html(Blaze.toHTMLWithData Template[column.template], {value: cellData, doc: rowData}, node)
-
+					$(node).html(Blaze.toHTMLWithData Template[column.template], {value: cellData, doc: rowData, collection: name, field: column.name}, node)
+			else if column.format
+				if column.format == "date"
+					createdCell = (node, cellData, rowData) ->
+						$(node).html(moment(cellData).format("MM/DD/YYYY"))
+				else if column.format == "options"
+					coll = adminCollectionObject(name)
+					# console.log "select table collection: ", coll
+					# sch = coll.simpleSchema()
+					options = coll.simpleSchema()._schema[column.name]?.autoform?.options
+					# console.log "select options: ", coll.simpleSchema()._schema[column.name]?.autoform?.options
+					if options
+						createdCell = (node, cellData, rowData) ->
+							d = cellData
+							dtype = typeof d
+							for k,v of options
+								if(dtype == "number")
+									k = parseInt(k)
+								if k == d
+									$(node).html(v)
+									break
+				# createdCell = (node, cellData, rowData) ->
+					# 	$(node).html(moment(cellData).format("MM/DD/YYYY"))
 			data: column.name
 			title: column.label
 			createdCell: createdCell
+			render: column.render
+			orderable: true
 
 		if columns.length == 0
 			columns = defaultColumns
+
+		# console.log "adminCreateTables children?: ", collection.children and adminTablePubName(name)
 
 		AdminTables[name] = new Tabular.Table
 			name: name
