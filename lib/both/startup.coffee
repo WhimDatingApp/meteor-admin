@@ -99,7 +99,10 @@ adminCreateTables = (collections) ->
 			sub: collection.sub
 			columns: _.union columns, adminEditDelButtons
 			extraFields: collection.extraFields
+			searchFields: collection.searchFields
 			dom: adminTablesDom
+			allow: (userId) ->
+				return Roles.userIsInRole(userId, 'admin')
 
 adminPublishTables = (collections) ->
 	_.each collections, (collection, name) ->
@@ -109,10 +112,13 @@ adminPublishTables = (collections) ->
 			check ids, Array
 			check fields, Match.Optional Object
 
-			@unblock()
+			# @unblock()
+
+			if not Roles.userIsInRole this.userId, ['admin']
+				return undefined
 
 			find: ->
-				@unblock()
+				# @unblock()
 				adminCollectionObject(name).find {_id: {$in: ids}}, {fields: fields}
 			children: collection.children
 
