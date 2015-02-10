@@ -56,10 +56,7 @@ adminTablePubName = (collection) ->
 adminCreateTables = (collections) ->
 	_.each AdminConfig?.collections, (collection, name) ->
 		columns = _.map collection.tableColumns, (column) ->
-			if column.template
-				createdCell = (node, cellData, rowData) ->
-					$(node).html(Blaze.toHTMLWithData Template[column.template], {value: cellData, doc: rowData, collection: name, field: column.name}, node)
-			else if column.format
+			if column.format
 				if column.format == "date"
 					createdCell = (node, cellData, rowData) ->
 						$(node).html(moment(cellData).format("MM/DD/YYYY"))
@@ -77,10 +74,16 @@ adminCreateTables = (collections) ->
 								if(dtype == "number")
 									k = parseInt(k)
 								if k == d
-									$(node).html(v)
+									if column.template
+										$(node).html(Blaze.toHTMLWithData Template[column.template], {value: cellData, formatted: v, doc: rowData, collection: name, field: column.name}, node)
+									else
+										$(node).html(v)
 									break
 				# createdCell = (node, cellData, rowData) ->
 					# 	$(node).html(moment(cellData).format("MM/DD/YYYY"))
+			else if column.template
+				createdCell = (node, cellData, rowData) ->
+					$(node).html(Blaze.toHTMLWithData Template[column.template], {value: cellData, doc: rowData, collection: name, field: column.name}, node)
 			data: column.name
 			title: column.label
 			createdCell: createdCell
