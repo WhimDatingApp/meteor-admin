@@ -1,6 +1,6 @@
 @AdminTables = {}
 
-adminTablesDom = '<"box"<"box-header"<"box-toolbar"<"pull-left"<lf>><"pull-right"p>>><"box-body"t>>'
+adminTablesDom = '<"box"<"box-header"<"box-toolbar"<"pull-left"<l>><"pull-right"p>>><"box-body"t>>'
 adminEditDelButtons = [
 	{
 		data: '_id'
@@ -85,7 +85,6 @@ adminCreateTables = (collections) ->
 			title: column.label
 			createdCell: createdCell
 			render: column.render
-			orderable: true
 
 		if columns.length == 0
 			columns = defaultColumns
@@ -112,13 +111,13 @@ adminPublishTables = (collections) ->
 			check ids, Array
 			check fields, Match.Optional Object
 
-			# @unblock()
+			@unblock()
 
 			if not Roles.userIsInRole this.userId, ['admin']
 				return undefined
 
 			find: ->
-				# @unblock()
+				@unblock()
 				adminCollectionObject(name).find {_id: {$in: ids}}, {fields: fields}
 			children: collection.children
 
