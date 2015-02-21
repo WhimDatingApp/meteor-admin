@@ -110,3 +110,4 @@ Router.route "adminDashboardEdit",
 		Session.set 'admin_doc', adminCollectionObject(@params.collection).findOne _id : parseID(@params._id)
 	data: ->
 		admin_collection: adminCollectionObject @params.collection
+		admin_table: AdminTables[@params.collection]
