@@ -79,11 +79,11 @@ UI.registerHelper 'adminCollectionCount', (collection)->
 		AdminCollectionsCount.findOne({collection: collection})?.count
 
 UI.registerHelper 'adminTemplate', (collection,mode)->
-	console.log "adminTemplate.this: ", this
+	# console.log "adminTemplate.this: ", this
 	if collection.toLowerCase() != 'adminusers' && typeof AdminConfig.collections[collection].templates != 'undefined'
 		tmplConfig = AdminConfig.collections[collection].templates[mode]
-		if tmplConfig.navFilter
-			console.log "adminTemplate.navFilter: true"
+		# if tmplConfig.navFilter
+			# console.log "adminTemplate.navFilter: true"
 			#tmplConfig.filterTable = 
 		tmplConfig
 
