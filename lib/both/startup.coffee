@@ -1,6 +1,6 @@
 @AdminTables = {}
 
-adminTablesDom = '<"box"<"box-header"<"box-toolbar"<"pull-left"<l>><"pull-right"p>>><"box-body"t>>'
+adminTablesDom = '<"box"<"box-header"<"box-toolbar"<"pull-left"<l>><"pull-right"p>>><"box-body"t><"box-header"<"box-toolbar"<"pull-right"p>>>>'
 adminEditDelButtons = [
 	{
 		data: '_id'
@@ -103,6 +103,37 @@ adminCreateTables = (collections) ->
 			extraFields: collection.extraFields
 			searchFields: collection.searchFields
 			dom: adminTablesDom
+			# pageLength: ->
+			# 	if Meteor.isClient 
+			# 		return Session.get "Tabular.pageLength" 
+			# 	else
+			# 		5
+			# stateSave: true
+			# stateSaveCallback: (settings, data) ->
+			# 	update = false
+			# 	tables = Session.get "tableState"
+			# 	if not tables?
+			# 		tables = {}
+			# 	if not tables?[settings.sTableId]?
+			# 		update = true
+			# 	else
+			# 		table = tables[settings.sTableId]
+			# 		if table.length != data.length or table.start != data.start or not _.isEqual(table.order, data.order)
+			# 			update = true
+
+			# 	if update?
+			# 		console.log "table state updating: ", tables
+			# 		tables[settings.sTableId] = data
+			# 		Session.set "tableState", tables
+			# 		console.log "table state save: ", tables
+
+			# 	return false
+
+			# stateLoadCallback: (settings) ->
+			# 	console.log "table state GET"
+			# 	# Session.get "tableState"
+				# return false
+
 			allow: (userId) ->
 				return Roles.userIsInRole(userId, 'admin')
 
