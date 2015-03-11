@@ -97,6 +97,7 @@ Router.route "adminDashboardEdit",
 	path: "/admin/:collection/:_id/edit"
 	template: "AdminDashboardEdit"
 	controller: "AdminController"
+	name: "adminDashboardEdit"
 	waitOn: ->
 		Meteor.subscribe('adminCollectionDoc', @params.collection, parseID(@params._id))
 	action: ->

@@ -99,7 +99,8 @@ adminCreateTables = (collections) ->
 			collection: adminCollectionObject(name)
 			pub: collection.children and adminTablePubName(name)
 			sub: collection.sub
-			columns: _.union columns, adminEditDelButtons
+			# columns: _.union columns, adminEditDelButtons
+			columns: columns
 			extraFields: collection.extraFields
 			searchFields: collection.searchFields
 			dom: adminTablesDom
