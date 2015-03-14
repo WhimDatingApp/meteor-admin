@@ -1,6 +1,6 @@
 @AdminTables = {}
 
-adminTablesDom = '<"box"<"box-header"<"box-toolbar"<"pull-left"<l>><"pull-right"p>>><"box-body"t><"box-header"<"box-toolbar"<"pull-right"p>>>>'
+adminTablesDom = '<"box"<"box-header"<"box-toolbar"<"pull-left"<l>><"pull-right"p>>><"box-body"t><"pull-right"p>>'
 adminEditDelButtons = [
 	{
 		data: '_id'
