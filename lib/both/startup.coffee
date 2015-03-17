@@ -141,19 +141,33 @@ adminCreateTables = (collections) ->
 adminPublishTables = (collections) ->
 	_.each collections, (collection, name) ->
 		if not collection.children then return undefined
-		Meteor.publishComposite adminTablePubName(name), (tableName, ids, fields) ->
+		Meteor.publishComposite adminTablePubName(name), (tableName, ids, fields, sort) ->
 			check tableName, String
 			check ids, Array
 			check fields, Match.Optional Object
 
-			@unblock()
-
 			if not Roles.userIsInRole this.userId, ['admin']
 				return undefined
 
+			@unblock()
+
+			if collection.extraFields?
+				_.forEach collection.extraFields, (field) ->
+					fields[field] = 1
+
 			find: ->
 				@unblock()
-				adminCollectionObject(name).find {_id: {$in: ids}}, {fields: fields}
+
+				finder = {fields: fields}
+				if sort?
+					finder.sort = sort
+
+				cursor = adminCollectionObject(name).find {_id: {$in: ids}}, finder
+				# cursor2 = adminCollectionObject(name).find {_id: {$in: ids}}, {fields: {FirstName: 1, Status: 1}}
+				results = cursor.map (doc) ->
+					return {id: doc._id, name: doc.FirstName}
+				console.log "2nd publish: ", ids, results
+				cursor
 			children: collection.children
 
 Meteor.startup ->
