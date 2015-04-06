@@ -1,6 +1,6 @@
 @AdminTables = {}
 
-adminTablesDom = '<"box"<"box-header"<"box-toolbar"<"pull-left"<l>><"pull-right"p>>><"box-body"t>>'
+adminTablesDom = '<"box"<"box-header"<"box-toolbar"<"pull-left"<l>><"pull-right"p>>><"box-body"t><"pull-right"p>>'
 adminEditDelButtons = [
 	{
 		data: '_id'
@@ -99,29 +99,75 @@ adminCreateTables = (collections) ->
 			collection: adminCollectionObject(name)
 			pub: collection.children and adminTablePubName(name)
 			sub: collection.sub
-			columns: _.union columns, adminEditDelButtons
+			# columns: _.union columns, adminEditDelButtons
+			columns: columns
 			extraFields: collection.extraFields
 			searchFields: collection.searchFields
 			dom: adminTablesDom
+			# pageLength: ->
+			# 	if Meteor.isClient 
+			# 		return Session.get "Tabular.pageLength" 
+			# 	else
+			# 		5
+			# stateSave: true
+			# stateSaveCallback: (settings, data) ->
+			# 	update = false
+			# 	tables = Session.get "tableState"
+			# 	if not tables?
+			# 		tables = {}
+			# 	if not tables?[settings.sTableId]?
+			# 		update = true
+			# 	else
+			# 		table = tables[settings.sTableId]
+			# 		if table.length != data.length or table.start != data.start or not _.isEqual(table.order, data.order)
+			# 			update = true
+
+			# 	if update?
+			# 		console.log "table state updating: ", tables
+			# 		tables[settings.sTableId] = data
+			# 		Session.set "tableState", tables
+			# 		console.log "table state save: ", tables
+
+			# 	return false
+
+			# stateLoadCallback: (settings) ->
+			# 	console.log "table state GET"
+			# 	# Session.get "tableState"
+				# return false
+
 			allow: (userId) ->
 				return Roles.userIsInRole(userId, 'admin')
 
 adminPublishTables = (collections) ->
 	_.each collections, (collection, name) ->
 		if not collection.children then return undefined
-		Meteor.publishComposite adminTablePubName(name), (tableName, ids, fields) ->
+		Meteor.publishComposite adminTablePubName(name), (tableName, ids, fields, sort) ->
 			check tableName, String
 			check ids, Array
 			check fields, Match.Optional Object
 
-			@unblock()
-
 			if not Roles.userIsInRole this.userId, ['admin']
 				return undefined
 
+			@unblock()
+
+			if collection.extraFields?
+				_.forEach collection.extraFields, (field) ->
+					fields[field] = 1
+
 			find: ->
 				@unblock()
-				adminCollectionObject(name).find {_id: {$in: ids}}, {fields: fields}
+
+				finder = {fields: fields}
+				if sort?
+					finder.sort = sort
+
+				cursor = adminCollectionObject(name).find {_id: {$in: ids}}, finder
+				# cursor2 = adminCollectionObject(name).find {_id: {$in: ids}}, {fields: {FirstName: 1, Status: 1}}
+				results = cursor.map (doc) ->
+					return {id: doc._id, name: doc.FirstName}
+				console.log "2nd publish: ", ids, results
+				cursor
 			children: collection.children
 
 Meteor.startup ->

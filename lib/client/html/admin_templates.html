@@ -43,7 +43,7 @@
 		{{/with}}
 	{{else}}
 		{{#if hasDocuments}}
-			{{> tabular table=admin_table class="table dataTable"}}
+			{{> tabular table=admin_table class="table table-striped table-bordered table-condensed dataTable"}}
 		{{else}}
 			<div class="alert alert-info">
 				<p>There are no visible items in this collection.</p>
@@ -76,7 +76,7 @@
 <template name="AdminDashboardUsersEdit">
 	{{> adminAlert}}
 	{{#if adminUserSchemaExists}}
-	{{> quickForm id="admin_update_user" buttonContent="Update" buttonClasses="btn btn-primary btn-sm" collection=adminGetUsers doc=admin_current_doc omitFields="roles,services"}}
+	{{> quickForm id="adminUpdateUser" buttonContent="Update" buttonClasses="btn btn-primary btn-sm" collection=adminGetUsers doc=admin_current_doc omitFields="roles,services"}}
 	<hr/>
 	{{/if}}
 	

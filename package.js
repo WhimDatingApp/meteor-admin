@@ -9,14 +9,14 @@ Package.on_use(function(api){
 
   both = ['client','server']
 
-  api.versionsFrom('METEOR@1.0');
+  api.versionsFrom('METEOR@1.0.5');
 
   api.use(
     ['iron:router@1.0.7',
     'coffeescript',
     'underscore',
     'aldeed:collection2@2.3.2',
-    'aldeed:autoform@4.2.2',
+    'aldeed:autoform@4.2.2 || 5.0.0',
     'aldeed:template-extension@3.1.1',
     'alanning:roles@1.2.13',
     'raix:handlebar-helpers@0.2.4',
